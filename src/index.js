@@ -3,34 +3,55 @@ const template = document.createElement('template')
 const getInnerHTML = that => {
   return `
   <style>
-  .open-in-quickapp {
+  .quickapp-block {
     position: fixed;
-    bottom: 0;
-    left: 50%;
-    right: 50%;
+    bottom: 10px;
+    width: 100%;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 120px;
-    height: 38px;
-    line-height: 38px;
-    transform: translate(-50%, -50%);
+  }
+  .open-in-quickapp {
+    position: fixed;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 160px;
+    height: 40px;
+    line-height: 40px;
+    font-weight: 500;
     margin: auto;
-    color: #ffffff;
-    border: 1px solid #20a0ff;
-    border-radius: 20px;
+    color: #f4ed38;
+    border: solid 0.125em transparent;
+    border-radius: 25px;
     padding: 0 10px;
     text-decoration: none;
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.2s ease-out;
+    animation: animat 1.8s infinite;
     z-index: 999999;
+    background-color: #2EE59D;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    transform: translateY(-7px);
+  }
+  @keyframes animat {
+    0%{ transform: scale(.8); }
+    50%{ transform: scale(1); }
+    100%{ transform: scale(.8); }
   }
   </style>
 
-  <a href="${that.deeplink}"
-    style="color: ${that.color};background-color: ${that.bgcolor};display: ${that.display}"
-    class="open-in-quickapp"
-    >${that.text}
-  </a>
+  <div class="quickapp-block">
+    <a href="${that.deeplink}"
+      style="color: ${that.color};background-color: ${that.bgcolor};display: ${that.display}"
+      class="open-in-quickapp"
+      >
+      <svg t="1627211279403" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2043" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22"><defs><style type="text/css">@font-face { font-family: feedback-iconfont; src: url("//at.alicdn.com/t/font_1031158_1uhr8ri0pk5.eot?#iefix") format("embedded-opentype"), url("//at.alicdn.com/t/font_1031158_1uhr8ri0pk5.woff2") format("woff2"), url("//at.alicdn.com/t/font_1031158_1uhr8ri0pk5.woff") format("woff"), url("//at.alicdn.com/t/font_1031158_1uhr8ri0pk5.ttf") format("truetype"), url("//at.alicdn.com/t/font_1031158_1uhr8ri0pk5.svg#iconfont") format("svg"); }
+      </style></defs><path d="M508.697 86.818 299.807 511.545 461.145 511.545 262.562 937.182 755.629 357.896 557.332 357.896 761.438 86.818Z" p-id="2044" fill="#f4ed38"></path></svg>
+      ${that.text}
+    </a>
+  </div>
 `
 }
 
@@ -71,7 +92,7 @@ class QuickappDeeplink extends HTMLElement {
 
   get brand() {
     return (
-      this.getAttribute('brand') || 'Vivo|Weixin'
+      this.getAttribute('brand') || 'vivo|Weixin|huawei|HUAWEI|oppo|OPPO'
     )
   }
   set brand(v) {
@@ -84,12 +105,12 @@ class QuickappDeeplink extends HTMLElement {
     const isPermit = brandArr.some(brand => {
       return ua.includes(brand)
     })
-    const isDisplay = this.isAndroidSystem() && isPermit
+    const isDisplay = this.isAndroidSystem() && isPermit && !this.isInQuickApp()
     return isDisplay ? 'flex' : 'none'
   }
 
   get deeplink() {
-    const deeplink = this.getAttribute('deeplink') || 'https://hapjs.org/app/graceful.sentences.com'
+    const deeplink = this.getAttribute('deeplink') || 'hap://app/graceful.sentences.com'
     return `${deeplink}?path=${location.href}`
   }
   set deeplink(v) {
@@ -99,6 +120,15 @@ class QuickappDeeplink extends HTMLElement {
   isAndroidSystem() {
     const ua = window.navigator.userAgent
     return ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1
+  }
+
+  isInQuickApp() {
+    try {
+      system.postMessage({})
+      return true
+    } catch (error) {
+      return false
+    }
   }
 }
 
