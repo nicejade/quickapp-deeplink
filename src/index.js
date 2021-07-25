@@ -32,7 +32,7 @@ const getInnerHTML = that => {
     animation: animat 1.8s infinite;
     z-index: 999999;
     background-color: #2EE59D;
-    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    box-shadow: 0px 8px 15px rgba(46, 229, 157, 0.4);
     transform: translateY(-7px);
   }
   @keyframes animat {
@@ -74,7 +74,7 @@ class QuickappDeeplink extends HTMLElement {
 
   get bgcolor() {
     return (
-      this.getAttribute('bgcolor') || '#20a0ff'
+      this.getAttribute('bgcolor')
     )
   }
   set bgcolor(v) {

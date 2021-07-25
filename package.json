@@ -1,6 +1,6 @@
 {
   "name": "quickapp-deeplink",
-  "version": "2.1.0",
+  "version": "2.3.0",
   "description": "基于快应用 deeplink，从 Web 页面拉起指定「快应用」.",
   "main": "index.js",
   "scripts": {
