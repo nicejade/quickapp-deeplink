@@ -15,7 +15,6 @@ const getInnerHTML = that => {
   .open-in-quickapp {
     position: fixed;
     bottom: 10px;
-    display: flex;
     align-items: center;
     justify-content: center;
     min-width: 160px;
@@ -74,7 +73,7 @@ class QuickappDeeplink extends HTMLElement {
 
   get bgcolor() {
     return (
-      this.getAttribute('bgcolor')
+      this.getAttribute('bgcolor') || '#2EE59D'
     )
   }
   set bgcolor(v) {
